@@ -2,24 +2,23 @@
 import pytest
 
 from target import (
-    is_adult,
+    average,
     celsius_to_fahrenheit,
+    common_items,
     count_vowels,
-    invert,
-    greet,
+    divide,
+    factorial,
     find_max,
     get_price,
-    swap,
-    common_items,
+    greet,
+    invert,
+    is_adult,
     is_leap_year,
-    to_int,
-    divide,
     power,
     square_root,
-    factorial,
-    average,
+    swap,
+    to_int,
 )
-
 
 # =====================================================
 # 1. is_adult(age)
