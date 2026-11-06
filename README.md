@@ -4,13 +4,15 @@
 **Project Name:** Functional Testing, CI/CD and Live Deployment  
 **Repository:** [functional-testing-2507205](https://github.com/Ftamim003/functional-testing-2507205)
 
-![Functional Testing CI](https://github.com/Ftamim003/functional-testing-2507205/actions/workflows/ci.yml/badge.svg?branch=main)
+[![Functional Testing CI](https://github.com/Ftamim003/functional-testing-2507205/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Ftamim003/functional-testing-2507205/actions/workflows/ci.yml)
 
 ## 1. Project Overview
 
 This project focuses on functional testing of a Python module containing 16 functions. The objective is to develop comprehensive automated tests, achieve 100% line and branch coverage, implement a Continuous Integration and Continuous Deployment (CI/CD) pipeline, and deploy a web application.
 
-The project uses **pytest** for automated testing, **pytest-cov** for coverage measurement, **Ruff** for code linting, and GitHub Actions for CI automation.
+The project uses **pytest** for automated testing, **pytest-cov** for coverage measurement, **Ruff** for code linting, Flask for the backend, and GitHub Actions for CI automation.
+
+A web-based interface is also provided to execute all 16 functions and display their results or errors.
 
 ## 2. Technologies Used
 
@@ -19,11 +21,11 @@ The project uses **pytest** for automated testing, **pytest-cov** for coverage m
 - pytest-cov
 - Coverage.py
 - Ruff
+- Flask
+- HTML, CSS and JavaScript
 - Git and GitHub
 - GitHub Actions
-- HTML, CSS and JavaScript (frontend development)
-- Flask (planned backend)
-- Render (planned deployment)
+- Render (planned deployment platform)
 
 ## 3. Project Structure
 
@@ -31,8 +33,17 @@ The project uses **pytest** for automated testing, **pytest-cov** for coverage m
 functional-testing-2507205/
 │
 ├── target.py
+├── app.py
 ├── tests/
-│   └── test_target.py
+│   ├── test_target.py
+│   └── test_app.py
+│
+├── templates/
+│   └── index.html
+│
+├── static/
+│   ├── style.css
+│   └── script.js
 │
 ├── requirements.txt
 ├── README.md
@@ -42,8 +53,6 @@ functional-testing-2507205/
     └── workflows/
         └── ci.yml
 ```
-
-Additional frontend and deployment files will be added as development progresses.
 
 ## 4. Installation and Setup
 
@@ -97,34 +106,35 @@ python -m pytest -v --cov=target --cov-branch --cov-report=term-missing
 Enforce the required 100% coverage:
 
 ```bash
-python -m pytest -v --cov=target --cov-branch --cov-fail-under=100
+python -m pytest -v --cov=target --cov-branch --cov-report=term-missing --cov-fail-under=100
 ```
 
 Run Ruff linting:
 
 ```bash
-ruff check target.py tests/
+ruff check target.py tests/ app.py
 ```
 
 ## 6. Testing Results
 
-The test suite covers all 16 functions in `target.py`, including valid inputs, boundary conditions, invalid inputs, exception handling and return types.
+The automated test suite covers all 16 functions in `target.py`, including valid inputs, boundary conditions, invalid inputs, exception handling and return types.
 
 **Latest successful local test results:**
 
 | Metric | Result |
 |---|---:|
-| Total tests passed | 137 |
+| Total tests passed | 144 |
 | Statement coverage | 100% |
 | Branch coverage | 100% |
 | Statements covered | 59/59 |
 | Branches covered | 26/26 |
 | Failed tests | 0 |
-| Ruff linting | Passed |
+
+Ruff linting has also passed after extending the lint check to include `app.py`.
 
 **GitHub Actions CI results:**
 
-The automated CI workflow has successfully completed on all three supported Python versions.
+The CI workflow has successfully completed on all three supported Python versions in previous runs.
 
 | Python version | CI result |
 |---|---|
@@ -199,22 +209,49 @@ The CI workflow uses a matrix strategy to verify compatibility across all three 
 
 ## 10. Web Application
 
-**Implementation status: Pending.**
+**Implementation status: Completed.**
 
-The planned web application will provide an interface to execute all 16 functions from `target.py` and display their results or errors.
+A Flask-based web application has been developed with an HTML, CSS and JavaScript frontend.
 
-The application will use a Flask backend with an HTML, CSS and JavaScript frontend.
+The application provides:
+
+- An interface to select and execute all 16 functions.
+- Dynamic input fields based on the selected function.
+- Display of successful results and their data types.
+- Display of errors and exception information.
+- A backend API endpoint for function execution.
+- A health endpoint for checking application status and deployed commit information.
+
+### Run the application locally
+
+```bash
+python app.py
+```
+
+Open the following address in your browser:
+
+```text
+http://127.0.0.1:5000
+```
+
+### API endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/` | Display the web application |
+| POST | `/api/run` | Execute a selected function |
+| GET | `/health` | Check application health and commit SHA |
 
 ## 11. Continuous Deployment and Live Deployment
 
 **Implementation status: Pending.**
 
-**Deployment platform:** Render
+**Planned deployment platform:** Render
 
-The planned deployment pipeline will:
+The deployment pipeline will:
 
 - Deploy only after successful CI testing.
-- Deploy automatically when changes are pushed to `main`.
+- Deploy only when changes are pushed to `main`.
 - Use GitHub Secrets for deployment credentials.
 - Expose a `/health` endpoint.
 - Return the deployed Git commit SHA.
