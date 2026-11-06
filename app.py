@@ -112,12 +112,12 @@ def run_function():
             "result_type": type(result).__name__
         })
 
-    except Exception as error:
+    except (TypeError, ValueError, KeyError, ZeroDivisionError, AttributeError) as error:
         return jsonify({
-            "success": False,
-            "error_type": type(error).__name__,
-            "error": str(error)
-        }), 400
+        "success": False,
+        "error_type": type(error).__name__,
+        "error": str(error)
+    }), 400
 
 
 @app.route("/health")
