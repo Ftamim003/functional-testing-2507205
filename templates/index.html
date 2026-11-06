@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Function Testing Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">FT</div>
+            <div>
+                <h1>Function Testing</h1>
+                <p>Interactive Testing Dashboard</p>
+            </div>
+        </div>
+
+        <div class="status">
+            <span class="status-dot"></span>
+            Application Ready
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="intro">
+            <span class="eyebrow">PYTHON FUNCTION TESTING</span>
+            <h2>Test your functions.</h2>
+            <p>
+                Select a function, provide its input values, and execute it.
+                View the returned result or any errors instantly.
+            </p>
+        </section>
+
+        <section class="dashboard">
+
+            <div class="panel function-panel">
+
+                <div class="panel-heading">
+                    <div>
+                        <span class="step-label">STEP 01</span>
+                        <h3>Select a function</h3>
+                    </div>
+                    <span class="count-badge">16 FUNCTIONS</span>
+                </div>
+
+                <label for="functionSelect">Available functions</label>
+
+                <select id="functionSelect">
+                    <option value="is_adult">is_adult</option>
+                    <option value="celsius_to_fahrenheit">celsius_to_fahrenheit</option>
+                    <option value="count_vowels">count_vowels</option>
+                    <option value="invert">invert</option>
+                    <option value="greet">greet</option>
+                    <option value="find_max">find_max</option>
+                    <option value="get_price">get_price</option>
+                    <option value="swap">swap</option>
+                    <option value="common_items">common_items</option>
+                    <option value="is_leap_year">is_leap_year</option>
+                    <option value="to_int">to_int</option>
+                    <option value="divide">divide</option>
+                    <option value="power">power</option>
+                    <option value="square_root">square_root</option>
+                    <option value="factorial">factorial</option>
+                    <option value="average">average</option>
+                </select>
+
+                <div class="function-info">
+                    <span class="info-icon">i</span>
+                    <p id="functionDescription">
+                        Checks whether a person is an adult.
+                    </p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="panel-heading input-heading">
+                    <div>
+                        <span class="step-label">STEP 02</span>
+                        <h3>Provide input</h3>
+                    </div>
+                </div>
+
+                <form id="functionForm">
+                    <div id="inputFields"></div>
+
+                    <button type="submit" id="runButton" class="run-button">
+                        <span>▶</span>
+                        Run Function
+                    </button>
+                </form>
+
+                <p class="input-hint">
+                    Tip: For list, tuple, set, or dictionary inputs,
+                    enter valid JSON values.
+                </p>
+
+            </div>
+
+            <div class="panel result-panel">
+
+                <div class="panel-heading">
+                    <div>
+                        <span class="step-label">STEP 03</span>
+                        <h3>Execution result</h3>
+                    </div>
+                    <span id="resultStatus" class="result-badge idle">
+                        WAITING
+                    </span>
+                </div>
+
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-icon">⌘</div>
+                    <h4>Ready to execute</h4>
+                    <p>
+                        Select a function and provide its input.
+                        Your result will appear here.
+                    </p>
+                </div>
+
+                <div id="resultContent" class="result-content hidden">
+
+                    <div class="result-label">FUNCTION</div>
+                    <div id="executedFunction" class="function-name"></div>
+
+                    <div class="result-label">OUTPUT</div>
+                    <pre id="resultOutput" class="output-box"></pre>
+
+                    <div id="resultTypeSection">
+                        <div class="result-label">RETURN TYPE</div>
+                        <span id="resultType" class="type-value"></span>
+                    </div>
+
+                    <div id="errorSection" class="hidden">
+                        <div class="result-label">ERROR TYPE</div>
+                        <span id="errorType" class="error-type"></span>
+
+                        <div class="result-label error-message-label">
+                            ERROR MESSAGE
+                        </div>
+                        <pre id="errorMessage" class="error-box"></pre>
+                    </div>
+
+                </div>
+
+                <button id="clearButton" class="clear-button" type="button">
+                    Clear Result
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="bottom-note">
+            <div>
+                <strong>Testing environment</strong>
+                <p>Powered by Python, Flask and pytest.</p>
+            </div>
+            <div class="footer-count">16 Python functions</div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Functional Testing, CI/CD and Live Deployment</p>
+        <p>Student ID: 2507205</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
