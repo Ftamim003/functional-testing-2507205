@@ -4,21 +4,25 @@
 **Project Name:** Functional Testing, CI/CD and Live Deployment  
 **Repository:** [functional-testing-2507205](https://github.com/Ftamim003/functional-testing-2507205)
 
+![Functional Testing CI](https://github.com/Ftamim003/functional-testing-2507205/actions/workflows/ci.yml/badge.svg?branch=main)
+
 ## 1. Project Overview
 
 This project focuses on functional testing of a Python module containing 16 functions. The objective is to develop comprehensive automated tests, achieve 100% line and branch coverage, implement a Continuous Integration and Continuous Deployment (CI/CD) pipeline, and deploy a web application.
 
-The project uses **pytest** for automated testing, **pytest-cov** for coverage measurement, **Ruff** for code linting, and GitHub Actions for CI/CD automation.
+The project uses **pytest** for automated testing, **pytest-cov** for coverage measurement, **Ruff** for code linting, and GitHub Actions for CI automation.
 
 ## 2. Technologies Used
 
-- Python 3.11
+- Python 3.10, 3.11 and 3.12
 - pytest
 - pytest-cov
+- Coverage.py
 - Ruff
 - Git and GitHub
 - GitHub Actions
-- HTML, CSS and JavaScript (planned frontend)
+- HTML, CSS and JavaScript (frontend development)
+- Flask (planned backend)
 - Render (planned deployment)
 
 ## 3. Project Structure
@@ -34,13 +38,12 @@ functional-testing-2507205/
 ├── README.md
 ├── .gitignore
 │
-├── app.py                    # Planned
-├── templates/                # Planned
-├── static/                   # Planned
 └── .github/
     └── workflows/
-        └── ci.yml             # Planned
+        └── ci.yml
 ```
+
+Additional frontend and deployment files will be added as development progresses.
 
 ## 4. Installation and Setup
 
@@ -97,9 +100,15 @@ Enforce the required 100% coverage:
 python -m pytest -v --cov=target --cov-branch --cov-fail-under=100
 ```
 
+Run Ruff linting:
+
+```bash
+ruff check target.py tests/
+```
+
 ## 6. Testing Results
 
-The current test suite covers all 16 functions in `target.py`, including valid inputs, boundary conditions, invalid inputs, exception handling and return types.
+The test suite covers all 16 functions in `target.py`, including valid inputs, boundary conditions, invalid inputs, exception handling and return types.
 
 **Latest successful local test results:**
 
@@ -111,8 +120,19 @@ The current test suite covers all 16 functions in `target.py`, including valid i
 | Statements covered | 59/59 |
 | Branches covered | 26/26 |
 | Failed tests | 0 |
+| Ruff linting | Passed |
 
-The required 100% coverage threshold has been achieved locally.
+**GitHub Actions CI results:**
+
+The automated CI workflow has successfully completed on all three supported Python versions.
+
+| Python version | CI result |
+|---|---|
+| Python 3.10 | Passed |
+| Python 3.11 | Passed |
+| Python 3.12 | Passed |
+
+The required 100% line and branch coverage threshold is enforced by the CI workflow.
 
 ## 7. Functions Covered by Tests
 
@@ -159,37 +179,53 @@ Similarly, Boolean values are accepted as years because Python treats them as in
 
 These are reported as suspected input-validation issues. The expected behavior for these specific input types is not explicitly defined in the original function requirements.
 
-## 9. Continuous Integration and Deployment
+## 9. Continuous Integration (CI)
 
-**Implementation status:** In progress.
+**Implementation status: Completed.**
 
-The planned CI/CD pipeline will:
+GitHub Actions is configured to automatically execute the following checks:
 
-- Run automatically on pushes and pull requests to `main`.
-- Execute tests using Python 3.10, 3.11 and 3.12.
+- Run on every push to `main`.
+- Run on pull requests targeting `main`.
+- Test using Python 3.10, 3.11 and 3.12.
+- Install dependencies from `requirements.txt`.
 - Run Ruff linting.
+- Execute the complete pytest test suite.
 - Enforce 100% line and branch coverage.
-- Upload coverage reports as workflow artifacts.
-- Deploy the application only after successful testing.
-- Perform smoke tests against the deployed application.
+- Generate a coverage report in XML format.
+- Upload coverage reports as GitHub Actions artifacts.
+
+The CI workflow uses a matrix strategy to verify compatibility across all three Python versions.
 
 ## 10. Web Application
 
-**Implementation status:** Planned.
+**Implementation status: Pending.**
 
-The web application will provide an interface to execute all 16 functions from `target.py` and display their results or errors.
+The planned web application will provide an interface to execute all 16 functions from `target.py` and display their results or errors.
 
-## 11. Live Deployment
+The application will use a Flask backend with an HTML, CSS and JavaScript frontend.
 
-**Platform:** Render (planned)
+## 11. Continuous Deployment and Live Deployment
+
+**Implementation status: Pending.**
+
+**Deployment platform:** Render
+
+The planned deployment pipeline will:
+
+- Deploy only after successful CI testing.
+- Deploy automatically when changes are pushed to `main`.
+- Use GitHub Secrets for deployment credentials.
+- Expose a `/health` endpoint.
+- Return the deployed Git commit SHA.
+- Display the deployed commit SHA in the frontend.
+- Perform smoke tests against the live application.
 
 **Live URL:** To be added after successful deployment.
 
-The deployed application will expose a `/health` endpoint to report the deployed commit SHA.
-
 ## 12. GitHub Repository
 
-[https://github.com/Ftamim003/functional-testing-2507205](https://github.com/Ftamim003/functional-testing-2507205)
+[View the GitHub Repository](https://github.com/Ftamim003/functional-testing-2507205)
 
 ---
 
