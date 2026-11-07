@@ -21,9 +21,9 @@
             </div>
         </div>
 
-        <div class="status">
-            <span class="status-dot"></span>
-            Application Ready
+        <div class="status" id="appHealthStatus">
+                 <span class="status-dot" id="healthStatusDot"></span>
+                 <span id="healthStatusText">Checking application...</span>
         </div>
     </header>
 
@@ -164,6 +164,25 @@
             </div>
             <div class="footer-count">16 Python functions</div>
         </section>
+
+        <section class="deployment-info">
+    <div class="deployment-heading">
+        <h3>Deployment Information</h3>
+        <span class="deployment-label">LIVE VERSION</span>
+    </div>
+
+    <div class="deployment-details">
+        <div>
+            <span class="deployment-title">Application Status</span>
+            <p id="deploymentHealth">Checking...</p>
+        </div>
+
+        <div>
+            <span class="deployment-title">Deployed Commit SHA</span>
+            <code id="commitSha">Checking...</code>
+        </div>
+    </div>
+</section>
 
     </main>
 
