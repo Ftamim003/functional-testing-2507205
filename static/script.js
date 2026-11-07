@@ -182,6 +182,10 @@ const functionSelect = document.getElementById("functionSelect");
 const inputFields = document.getElementById("inputFields");
 const functionForm = document.getElementById("functionForm");
 const runButton = document.getElementById("runButton");
+const healthStatusText = document.getElementById("healthStatusText");
+const healthStatusDot = document.getElementById("healthStatusDot");
+const deploymentHealth = document.getElementById("deploymentHealth");
+const commitSha = document.getElementById("commitSha");
 
 const emptyState = document.getElementById("emptyState");
 const resultContent = document.getElementById("resultContent");
@@ -385,5 +389,47 @@ functionSelect.addEventListener("change", renderInputFields);
 
 document.getElementById("clearButton").addEventListener("click", clearResult);
 
+
 // Display the initial function inputs.
 renderInputFields();
+
+// Retrieve application health and deployed commit information.
+async function loadHealthStatus() {
+    try {
+        const response = await fetch("/health", {
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("Health check failed.");
+        }
+
+        const data = await response.json();
+
+        if (data.status !== "healthy") {
+            throw new Error("Application is not healthy.");
+        }
+
+        // Update header status.
+        healthStatusText.textContent = "Application Healthy";
+        healthStatusDot.className = "status-dot healthy";
+
+        // Update deployment information.
+        deploymentHealth.textContent = "Healthy";
+        deploymentHealth.className = "health-healthy";
+
+        commitSha.textContent = data.commit_sha || "Not available";
+
+    } catch (error) {
+        healthStatusText.textContent = "Application Unavailable";
+        healthStatusDot.className = "status-dot unavailable";
+
+        deploymentHealth.textContent = "Unavailable";
+        deploymentHealth.className = "health-unavailable";
+
+        commitSha.textContent = "Unable to retrieve commit SHA";
+    }
+}
+
+// Check application health when the page loads.
+loadHealthStatus();
