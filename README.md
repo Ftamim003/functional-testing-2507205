@@ -2,15 +2,16 @@
 
 **Student ID:** 2507205  
 **Project Name:** Functional Testing, CI/CD and Live Deployment  
-**Repository:** [functional-testing-2507205](https://github.com/Ftamim003/functional-testing-2507205)
+**GitHub Repository:** [functional-testing-2507205](https://github.com/Ftamim003/functional-testing-2507205)  
+**Live Application:** [https://functional-testing-2507205.onrender.com/](https://functional-testing-2507205.onrender.com/)
 
 [![Functional Testing CI](https://github.com/Ftamim003/functional-testing-2507205/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Ftamim003/functional-testing-2507205/actions/workflows/ci.yml)
 
 ## 1. Project Overview
 
-This project focuses on functional testing of a Python module containing 16 functions. The objective is to develop comprehensive automated tests, achieve 100% line and branch coverage, implement a Continuous Integration and Continuous Deployment (CI/CD) pipeline, and deploy a web application.
+This project focuses on functional testing of a Python module containing 16 functions. The main objectives are to develop comprehensive automated tests, achieve 100% line and branch coverage, implement a Continuous Integration and Continuous Deployment (CI/CD) pipeline, and deploy a web application.
 
-The project uses **pytest** for automated testing, **pytest-cov** for coverage measurement, **Ruff** for code linting, Flask for the backend, and GitHub Actions for CI automation.
+The project uses **pytest** for automated testing, **pytest-cov** for coverage measurement, **Ruff** for code linting, Flask for the backend, and GitHub Actions for CI/CD automation.
 
 A web-based interface is also provided to execute all 16 functions and display their results or errors.
 
@@ -22,10 +23,11 @@ A web-based interface is also provided to execute all 16 functions and display t
 - Coverage.py
 - Ruff
 - Flask
+- Gunicorn
 - HTML, CSS and JavaScript
 - Git and GitHub
 - GitHub Actions
-- Render (planned deployment platform)
+- Render
 
 ## 3. Project Structure
 
@@ -130,11 +132,11 @@ The automated test suite covers all 16 functions in `target.py`, including valid
 | Branches covered | 26/26 |
 | Failed tests | 0 |
 
-Ruff linting has also passed after extending the lint check to include `app.py`.
+Ruff linting also passed successfully.
 
-**GitHub Actions CI results:**
+### GitHub Actions CI results
 
-The CI workflow has successfully completed on all three supported Python versions in previous runs.
+The CI workflow successfully executes tests across all three supported Python versions.
 
 | Python version | CI result |
 |---|---|
@@ -142,11 +144,11 @@ The CI workflow has successfully completed on all three supported Python version
 | Python 3.11 | Passed |
 | Python 3.12 | Passed |
 
-The required 100% line and branch coverage threshold is enforced by the CI workflow.
+The CI workflow enforces the required 100% line and branch coverage threshold.
 
 ## 7. Functions Covered by Tests
 
-The test suite covers the following functions:
+The test suite covers the following 16 functions:
 
 1. `is_adult()`
 2. `celsius_to_fahrenheit()`
@@ -207,6 +209,18 @@ GitHub Actions is configured to automatically execute the following checks:
 
 The CI workflow uses a matrix strategy to verify compatibility across all three Python versions.
 
+### Intentional CI failure demonstration
+
+An intentionally failing test was added to a separate feature branch to demonstrate the CI pipeline's failure detection.
+
+The results demonstrated that:
+
+- All three Python CI jobs failed when the intentional failing test was present.
+- After removing the temporary failing test, all three Python CI jobs passed.
+- The corrected changes were successfully merged into `main`.
+
+This demonstrated that the CI pipeline detects failing tests and prevents a failing pull request from being merged when the required checks are enforced.
+
 ## 10. Web Application
 
 **Implementation status: Completed.**
@@ -221,6 +235,7 @@ The application provides:
 - Display of errors and exception information.
 - A backend API endpoint for function execution.
 - A health endpoint for checking application status and deployed commit information.
+- A deployment information section displaying application health and the deployed commit SHA.
 
 ### Run the application locally
 
@@ -240,29 +255,72 @@ http://127.0.0.1:5000
 |---|---|---|
 | GET | `/` | Display the web application |
 | POST | `/api/run` | Execute a selected function |
-| GET | `/health` | Check application health and commit SHA |
+| GET | `/health` | Check application health and deployed commit SHA |
 
 ## 11. Continuous Deployment and Live Deployment
 
-**Implementation status: Pending.**
+**Implementation status: Completed.**
 
-**Planned deployment platform:** Render
+The Flask application is deployed on **Render** using GitHub Actions.
 
-The deployment pipeline will:
+**Live Application:**  
+[https://functional-testing-2507205.onrender.com/](https://functional-testing-2507205.onrender.com/)
 
-- Deploy only after successful CI testing.
-- Deploy only when changes are pushed to `main`.
-- Use GitHub Secrets for deployment credentials.
-- Expose a `/health` endpoint.
-- Return the deployed Git commit SHA.
-- Display the deployed commit SHA in the frontend.
-- Perform smoke tests against the live application.
+### Deployment configuration
 
-**Live URL:** To be added after successful deployment.
+The application uses Gunicorn as its production WSGI server.
 
-## 12. GitHub Repository
+- Build command: `pip install -r requirements.txt`
+- Start command: `gunicorn app:app`
+- Deployment platform: Render
+- Source repository: GitHub
 
-[View the GitHub Repository](https://github.com/Ftamim003/functional-testing-2507205)
+### Deployment pipeline
+
+The GitHub Actions workflow performs the following tasks:
+
+1. Runs automated tests on Python 3.10, 3.11 and 3.12.
+2. Executes Ruff linting.
+3. Enforces 100% line and branch coverage.
+4. Deploys to Render only after successful testing.
+5. Deploys only when changes are pushed to the `main` branch.
+6. Uses GitHub Secrets to protect deployment credentials.
+7. Runs live smoke tests after deployment.
+
+Automatic deployment is disabled on Render so that GitHub Actions controls the deployment process.
+
+### Deployment verification
+
+The `/health` endpoint returns the application health status and deployed Git commit SHA.
+
+The frontend displays the deployed commit SHA to help verify which version is running.
+
+Live endpoints:
+
+- Homepage: [https://functional-testing-2507205.onrender.com/](https://functional-testing-2507205.onrender.com/)
+- Health check: [https://functional-testing-2507205.onrender.com/health](https://functional-testing-2507205.onrender.com/health)
+
+The live smoke tests verify the deployed application through HTTP requests, including the homepage, health endpoint and function execution API.
+
+## 12. Branch Protection
+
+**Implementation status: Completed.**
+
+The `main` branch has a GitHub branch protection rule configured with:
+
+- Pull requests required before merging.
+- Required CI status checks before merging.
+- Branches required to be up to date before merging.
+
+This helps ensure that changes are reviewed through pull requests and pass the required automated checks before merging into `main`.
+
+## 13. GitHub Repository and Live Application
+
+**GitHub Repository:**  
+[https://github.com/Ftamim003/functional-testing-2507205](https://github.com/Ftamim003/functional-testing-2507205)
+
+**Live Application:**  
+[https://functional-testing-2507205.onrender.com/](https://functional-testing-2507205.onrender.com/)
 
 ---
 
