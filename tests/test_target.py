@@ -532,5 +532,5 @@ def test_average_mixed_types():
 
 
 
-def test_intentional_ci_failure():
-    assert 1 == 2
+# def test_intentional_ci_failure():
+#     assert 1 == 2
