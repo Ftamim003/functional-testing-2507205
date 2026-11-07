@@ -529,3 +529,8 @@ def test_average_wrong_type():
 def test_average_mixed_types():
     with pytest.raises(TypeError):
         average([1, "2"])
+
+
+
+def test_intentional_ci_failure():
+    assert 1 == 2
