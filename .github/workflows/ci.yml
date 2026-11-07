@@ -9,7 +9,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
+  # JOB 1: Run tests on all Python versions
   test:
     name: Test on Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
@@ -53,3 +57,107 @@ jobs:
           name: coverage-report-python-${{ matrix.python-version }}
           path: coverage.xml
           if-no-files-found: warn
+
+  # JOB 2: Deploy only after successful tests
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    needs: test
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Trigger Render deployment
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK" ]; then
+            echo "Render deploy secret is missing."
+            exit 1
+          fi
+
+          curl --fail --silent --show-error \
+            --request POST \
+            "$RENDER_DEPLOY_HOOK"
+
+          echo "Render deployment triggered successfully."
+
+  # JOB 3: Wait for deployment and test live application
+  smoke-test:
+    name: Live Smoke Tests
+    runs-on: ubuntu-latest
+    needs: deploy
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    env:
+      BASE_URL: https://functional-testing-2507205.onrender.com
+      EXPECTED_SHA: ${{ github.sha }}
+
+    steps:
+      - name: Wait for the new commit to go live
+        shell: bash
+        run: |
+          echo "Waiting for Render deployment..."
+
+          for i in {1..90}; do
+            RESPONSE=$(curl -fsS --max-time 15 \
+              "$BASE_URL/health" || true)
+
+            ACTUAL_SHA=$(echo "$RESPONSE" | python -c \
+              "import json,sys; print(json.load(sys.stdin).get('commit_sha',''))" \
+              2>/dev/null || true)
+
+            echo "Attempt $i: $ACTUAL_SHA"
+
+            if [ "$ACTUAL_SHA" = "$EXPECTED_SHA" ]; then
+              echo "Correct commit is live!"
+              exit 0
+            fi
+
+            sleep 10
+          done
+
+          echo "Deployment SHA did not match within 15 minutes."
+          exit 1
+
+      - name: Smoke test 1 - Homepage
+        run: |
+          STATUS=$(curl -sS -o /dev/null -w "%{http_code}" \
+            "$BASE_URL/")
+
+          test "$STATUS" = "200"
+          echo "Homepage passed."
+
+      - name: Smoke test 2 - Health and commit SHA
+        run: |
+          curl -fsS "$BASE_URL/health" > health.json
+
+          python -c "
+          import json
+          with open('health.json') as f:
+              data = json.load(f)
+
+          assert data['status'] == 'healthy'
+          assert data['commit_sha'] == '$EXPECTED_SHA'
+
+          print('Health check and commit SHA passed.')
+          "
+
+      - name: Smoke test 3 - API request
+        run: |
+          curl -fsS -X POST "$BASE_URL/api/run" \
+            -H "Content-Type: application/json" \
+            -d '{"function":"is_adult","arguments":{"age":20}}' \
+            > api.json
+
+          python -c "
+          import json
+          with open('api.json') as f:
+              data = json.load(f)
+
+          assert data['success'] is True
+          assert data['result'] is True
+
+          print('API smoke test passed.')
+          "
